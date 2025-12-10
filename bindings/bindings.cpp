@@ -1,14 +1,18 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
+#include "backtester.h"
 
 namespace py = pybind11;
 
-// Example function in C++ to expose
-int add(int a, int b) {
-    return a + b;
-}
-
 PYBIND11_MODULE(Backtester, m) {
-    m.doc() = "Quickstart module to verify pybind11 + CMake build";
+    m.doc() = "C++ Backtesting engine";
 
-    m.def("add", &add, "A function that adds two integers");
+    py::class_<Engine>(m, "Engine")
+        .def(py::init([](py::dict params = py::dict()) { return new Engine(params); }))
+        .def("run", &Engine::run, "Run the backtesting engine")
+        .def("update_config", &Engine::update_config, "Update configuration value",
+             py::arg("key"), py::arg("value"))
+        .def("get_config", &Engine::get_config, "Retrieve configuration value by key",
+             py::arg("key"));
 }

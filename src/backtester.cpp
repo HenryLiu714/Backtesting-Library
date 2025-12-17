@@ -1,8 +1,8 @@
 #include "backtester.h"
 
-Engine::Engine(py::dict params) {
+Engine::Engine(py::object strategy, py::dict config) {
     // Initialize configurations from params
-    for (auto item : params) {
+    for (auto item : config) {
         std::string key = py::cast<std::string>(item.first);
 
         double value = py::cast<double>(item.second);
